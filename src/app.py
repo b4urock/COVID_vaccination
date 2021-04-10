@@ -28,6 +28,9 @@ def load_data(path):
 # Função para plotar painel de Casos de COVID-19, óbitos por COVID-19
 # e Percentual de Isolamento.
 
+# Função para plotar painel de Casos de COVID-19, óbitos por COVID-19
+# e Percentual de Isolamento.
+
 def COVID_Cases_per_million(dfCountry1: pd.DataFrame, 
                             dfCountry2: pd.DataFrame,
                             cTitleCountry1: str,
@@ -256,8 +259,10 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   Population1             = dfCountry1['population'].max()
   Perc_Fully_Vaccinated1  = dfCountry1['people_fully_vaccinated_perc'].max()#round((dfCountry1['people_fully_vaccinated'].max()/ 
                            # dfCountry1['population'].max())*100,2)
-                            
-  Vaccination_Start_Date1 = dfCountry1.loc[~dfCountry1['new_vaccinations'].isnull()].iloc[0]['date']
+  try:                            
+    Vaccination_Start_Date1 = dfCountry1.loc[~dfCountry1['new_vaccinations'].isnull()].iloc[0]         ['date']
+  except:
+    Vaccination_Start_Date1 = '-'
 
   Cases_Total1            = int(dfCountry1['total_cases'].max())
   Deaths_Total1           = int(dfCountry1['total_deaths'].max())
@@ -267,7 +272,11 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   cells1.append(round((Population1/1000000),1))
   cells1.append(f'{Perc_Fully_Vaccinated1}%')
 
-  cells1.append(Vaccination_Start_Date1.strftime("%m/%d/%y"))
+  if Vaccination_Start_Date1 == '-':
+    cells1.append(Vaccination_Start_Date1)
+  else:
+    cells1.append(Vaccination_Start_Date1.strftime("%m/%d/%y"))
+
   cells1.append("{:,}".format(Cases_Total1))
   cells1.append("{:,}".format(Deaths_Total1))
   cells1.append(f'{Mortality_Rate1}%')
@@ -295,8 +304,12 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   Population2             = dfCountry2['population'].max()
   Perc_Fully_Vaccinated2  = round((dfCountry2['people_fully_vaccinated'].max()/ 
                             dfCountry2['population'].max())*100,2)
-                            
-  Vaccination_Start_Date2 = dfCountry2.loc[~dfCountry2['new_vaccinations'].isnull()].iloc[0]['date']
+  try:                            
+    Vaccination_Start_Date2 = dfCountry2.loc[~dfCountry2['new_vaccinations'].isnull()].iloc[0]
+    ['date']
+  except:
+    Vaccination_Start_Date2 = '-'
+
   Cases_Total2            = int(dfCountry2['total_cases'].max())
   Deaths_Total2           = int(dfCountry2['total_deaths'].max())
   Mortality_Rate2         = round(dfCountry2['new_deaths'].sum()/dfCountry2['new_cases'].sum()*100,2)
@@ -304,7 +317,12 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   cells2 = []
   cells2.append(round((Population2/1000000),1))
   cells2.append(f'{Perc_Fully_Vaccinated2}%')
-  cells2.append(Vaccination_Start_Date2.strftime("%m/%d/%y"))
+  
+  if Vaccination_Start_Date2 == '-':
+    cells2.append(Vaccination_Start_Date2)
+  else:
+    cells2.append(Vaccination_Start_Date2.strftime("%m/%d/%y"))
+
   cells2.append("{:,}".format(Cases_Total2))
   cells2.append("{:,}".format(Deaths_Total2))
   cells2.append(f'{Mortality_Rate2}%')
@@ -374,7 +392,10 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   fig.show()
   return 
 
-  # Função para plotar painel de Casos de COVID-19, óbitos por COVID-19
+# Função para plotar painel de Casos de COVID-19, óbitos por COVID-19
+# e Percentual de Isolamento.
+
+# Função para plotar painel de Casos de COVID-19, óbitos por COVID-19
 # e Percentual de Isolamento.
 
 def COVID_deaths (dfCountry1: pd.DataFrame, 
@@ -604,9 +625,12 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   last_month_death1 = dfCountry1.loc[dfCountry1['date'] < last_month, 'new_deaths'].sum()
   this_month_death1 = dfCountry1.loc[dfCountry1['date'] >= last_month, 'new_deaths'].sum()
   Population1             = dfCountry1['population'].max()
-  Perc_Fully_Vaccinated1  = dfCountry1['people_fully_vaccinated_perc'].max()
-                            
-  Vaccination_Start_Date1 = dfCountry1.loc[~dfCountry1['new_vaccinations'].isnull()].iloc[0]['date']
+  Perc_Fully_Vaccinated1  = dfCountry1['people_fully_vaccinated_perc'].max()#round((dfCountry1['people_fully_vaccinated'].max()/ 
+                           # dfCountry1['population'].max())*100,2)
+  try:                          
+    Vaccination_Start_Date1 = dfCountry1.loc[~dfCountry1['new_vaccinations'].isnull()].iloc[0]         ['date']
+  except:
+    Vaccination_Start_Date1 = '-'    
 
   casess_Total1           = int(dfCountry1['total_deaths'].max())
   deaths_Total1           = int(dfCountry1['total_deaths'].max())
@@ -615,8 +639,12 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   cells1 = []
   cells1.append(round((Population1/1000000),1))
   cells1.append(f'{Perc_Fully_Vaccinated1}%')
+  
+  if Vaccination_Start_Date1 == '-':
+    cells1.append(Vaccination_Start_Date1)
+  else:
+    cells1.append(Vaccination_Start_Date1.strftime("%m/%d/%y"))
 
-  cells1.append(Vaccination_Start_Date1.strftime("%m/%d/%y"))
   cells1.append("{:,}".format(deaths_Total1))
   cells1.append("{:,}".format(deaths_Total1))
   cells1.append(f'{Mortality_Rate1}%')
@@ -643,7 +671,11 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   Perc_Fully_Vaccinated2  = round((dfCountry2['people_fully_vaccinated'].max()/ 
                             dfCountry2['population'].max())*100,2)
                             
-  Vaccination_Start_Date2 = dfCountry2.loc[~dfCountry2['new_vaccinations'].isnull()].iloc[0]['date']
+  try:                          
+    Vaccination_Start_Date2 = dfCountry2.loc[~dfCountry2['new_vaccinations'].isnull()].iloc[0]         ['date']
+  except:
+    Vaccination_Start_Date2 = '-'
+
   cases_Total2            = int(dfCountry2['total_cases'].max())
   deaths_Total2           = int(dfCountry2['total_deaths'].max())
   Mortality_Rate2         = round(dfCountry2['new_deaths'].sum()/dfCountry2['new_cases'].sum()*100,2)
@@ -651,7 +683,12 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   cells2 = []
   cells2.append(round((Population2/1000000),1))
   cells2.append(f'{Perc_Fully_Vaccinated2}%')
-  cells2.append(Vaccination_Start_Date2.strftime("%m/%d/%y"))
+
+  if Vaccination_Start_Date2 == '-':
+    cells2.append(Vaccination_Start_Date2)
+  else:
+    cells2.append(Vaccination_Start_Date2.strftime("%m/%d/%y"))
+
   cells2.append("{:,}".format(cases_Total2))
   cells2.append("{:,}".format(deaths_Total2))
   cells2.append(f'{Mortality_Rate2}%')
