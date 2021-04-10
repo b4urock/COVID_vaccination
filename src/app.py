@@ -15,7 +15,7 @@ from datetime import timedelta
 
 import plotly.offline as pyo
 import plotly.graph_objs as go 
-from plotly.subplots import make_subplots        
+from plotly.subplots import make_subplots    
 
 @st.cache
 def load_data(path):
@@ -257,7 +257,7 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   Perc_Fully_Vaccinated1  = dfCountry1['people_fully_vaccinated_perc'].max()#round((dfCountry1['people_fully_vaccinated'].max()/ 
                            # dfCountry1['population'].max())*100,2)
                             
-  Vaccination_Start_Date1 = country1.loc[~country1['new_vaccinations'].isnull()].iloc[0]['date']
+  Vaccination_Start_Date1 = dfCountry1.loc[~dfCountry1['new_vaccinations'].isnull()].iloc[0]['date']
 
   Cases_Total1            = int(dfCountry1['total_cases'].max())
   Deaths_Total1           = int(dfCountry1['total_deaths'].max())
@@ -606,7 +606,7 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   Population1             = dfCountry1['population'].max()
   Perc_Fully_Vaccinated1  = dfCountry1['people_fully_vaccinated_perc'].max()
                             
-  Vaccination_Start_Date1 = country1.loc[~country1['new_vaccinations'].isnull()].iloc[0]['date']
+  Vaccination_Start_Date1 = dfCountry1.loc[~dfCountry1['new_vaccinations'].isnull()].iloc[0]['date']
 
   casess_Total1           = int(dfCountry1['total_deaths'].max())
   deaths_Total1           = int(dfCountry1['total_deaths'].max())
@@ -765,15 +765,15 @@ def main():
         country2['people_fully_vaccinated_perc']     = round(((country2['new_vaccinations'].cumsum()/2)/country2['population'])*100,2)  
 
     if pGraphType == 'Deaths Comparison':
-        COVID_deaths(pCountry1, 
-                     pCountry2,
+        COVID_deaths(country1, 
+                     country2,
                      pCountry1,
                      pCountry2,
                      'COVID-19 Country deaths comparison')
 
     elif pGraphType == 'Cases Comparison':
         COVID_Cases_per_million(country1, 
-                                pCountry2,
+                                country2,
                                 pCountry1,
                                 pCountry2,
                                 'COVID-19 Country cases comparison')                
