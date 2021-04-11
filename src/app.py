@@ -758,7 +758,7 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   fig.show()
   return 
 
-@st.cache(allow_output_mutation=True)
+#@st.cache(allow_output_mutation=True)
 def main():
     url = 'https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv?raw=true'
     dfVaccination = load_data(url)    
@@ -789,8 +789,8 @@ def main():
     pGraphType = st.sidebar.selectbox('Graph type', graph_type)
 
     # Creating the sliced dataframe to plot
-    country1 = dfVaccination.loc[dfVaccination.location==pCountry1]
-    country2 = dfVaccination.loc[dfVaccination.location==pCountry2]    
+    country1 = pd.DataFrame(dfVaccination.loc[dfVaccination.location==pCountry1])
+    country2 = pd.DataFrame(dfVaccination.loc[dfVaccination.location==pCountry2])   
 
     # Adjusting the vaccination info is necessary
     if country1.people_fully_vaccinated_per_million.isnull().all():
