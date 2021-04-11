@@ -758,7 +758,7 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   fig.show()
   return 
 
-
+@st.cache(allow_output_mutation=True)
 def main():
     url = 'https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv?raw=true'
     dfVaccination = load_data(url)    
