@@ -1,7 +1,5 @@
 # Imports
 import streamlit as st
-#import sys
-#!pip install --yes --prefix {sys.prefix} plotly
 
 import pandas as pd
 import numpy as np
@@ -17,7 +15,7 @@ import plotly.offline as pyo
 import plotly.graph_objs as go 
 from plotly.subplots import make_subplots    
 
-@st.cache
+@st.cache(allow_output_mutation=True)
 def load_data(path):
     data  = pd.read_csv(path,
                         encoding = 'utf-8', 
@@ -47,7 +45,7 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
 
   fig = make_subplots(rows=3, 
                       cols=2, 
-                      vertical_spacing=0.15,
+                      vertical_spacing=0.12,
                       horizontal_spacing=0.08,
                       specs=[[{"type": "scatter"}, {"type": "scatter"}],
                              [{"type": "scatter"}, {"type": "scatter"}],                          
@@ -63,7 +61,7 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
       go.Scatter(x=dfCountry1['date'], 
                 y=dfCountry1['new_cases_per_million'],
                 marker=dict(
-                            color='deepskyblue',
+                            color='blue',
                             size=120
           ),
       name=f"Daily cases per million in {cTitleCountry1}",
@@ -99,7 +97,7 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
       go.Scatter(x=dfCountry2['date'], 
                 y=dfCountry2['new_cases_per_million'],
                 marker=dict(
-                            color='gold',
+                            color='goldenrod',
                             size=120,
           ), 
       name=f"Daily Cases in {cTitleCountry2}",
@@ -107,7 +105,7 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
         f"<b>{cTitleCountry2}'s new cases per million </b><br><br>" +
         "Date: %{x}<br>" +
         "New cases per million: %{y:,.}<br>" +
-        "<extra></extra>"),      
+        "<extra></extra>"),   
       row=1, col=2
   )
 
@@ -249,7 +247,7 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
         "Tested per million: %{y:,.}<br>" +
         "<extra></extra>",
       showlegend=False),
-      row=2, col=2)  
+      row=2, col=2)   
 
   # Table Calculations for the first country
   today = pd.to_datetime('today')
@@ -352,7 +350,7 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
      plot2 = f'** No all test data avaiable for {cTitleCountry2}'
 
   fig.update_layout(
-      template = 'plotly_white',
+      template = 'plotly_dark',
       title = { 'text': f'{titulo}<br>**Interative Graph**',
                 'font': dict(size=20),
                 'y':0.95,
@@ -386,8 +384,15 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   if not plot2 is None: 
     fig.add_annotation(text=f'<b>{plot2}</b>',
                     xref="paper", yref="paper",
-                    x=0.77, y=0.33, showarrow=False)               
+                    x=0.77, y=0.33, showarrow=False)    
+
+  fig.update_layout( hoverlabel_font_color='white')                    
+
+  # Removing the Grid
   
+  fig.update_xaxes(showgrid=False)
+  fig.update_yaxes(showgrid=False)                    
+                            
   return fig
 
 # Função para plotar painel de Casos de COVID-19, óbitos por COVID-19
@@ -412,7 +417,7 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
 
   fig = make_subplots(rows=3, 
                       cols=2, 
-                      vertical_spacing=0.15,
+                      vertical_spacing=0.12,
                       horizontal_spacing=0.08,
                       specs=[[{"type": "scatter"}, {"type": "scatter"}],
                              [{"type": "scatter"}, {"type": "scatter"}],                          
@@ -428,7 +433,7 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
       go.Scatter(x=dfCountry1['date'], 
                 y=dfCountry1['new_deaths'],
                 marker=dict(
-                            color='deepskyblue',
+                            color='blue',
                             size=120
           ),
       name=f"Daily death count in {cTitleCountry1}",
@@ -657,7 +662,7 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
           ),
           cells=dict(
               values=cells1,
-              align = "center")
+              align = "center"),
       ),
       row=3, col=1
   )          
@@ -717,7 +722,7 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
      plot2 = f'** No all test data avaiable for {cTitleCountry2}'
 
   fig.update_layout(
-      template = 'plotly_white',
+      template = 'plotly_dark',
       title = { 'text': f'{titulo}<br>**Interative Graph**',
                 'font': dict(size=20),
                 'y':0.95,
@@ -729,7 +734,7 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
       yaxis3 = { 'categoryorder': 'total descending'},              
       autosize=False,
       width=1280,
-      height=900,     
+      height=900,          
       margin=dict(
           l=50,
           r=50,
@@ -751,10 +756,16 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   if not plot2 is None: 
     fig.add_annotation(text=f'<b>{plot2}</b>',
                     xref="paper", yref="paper",
-                    x=0.77, y=0.33, showarrow=False)               
+                    x=0.77, y=0.33, showarrow=False)   
+
+  fig.update_layout( hoverlabel_font_color='white')
+
+  # Removing the Grid
+  fig.update_xaxes(showgrid=False)
+  fig.update_yaxes(showgrid=False)
+
   return fig
 
-#@st.cache(allow_output_mutation=True)
 def main():
     url = 'https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv?raw=true'
     dfVaccination = load_data(url)    
@@ -770,9 +781,9 @@ def main():
     dfVaccination['new_vaccinations_per_million'] =  round((dfVaccination['new_vaccinations']/dfVaccination['population'])*1000000,2)
 
     # drop continents from data frame
-    #countries = ['South America', 'North America', 'World', 'Oceania','Europe', 'International', 'Africa', 'Asia', 'European Union']
-    #i = dfVaccination[dfVaccination.location.isin(countries)].index
-    #dfVaccination.drop(i, inplace=True)
+    countries = ['South America', 'North America', 'World', 'Oceania','Europe', 'International', 'Africa', 'Asia', 'European Union']
+    i = dfVaccination[dfVaccination.location.isin(countries)].index
+    dfVaccination.drop(i, inplace=True)
 
     countries = dfVaccination.location.unique().tolist()
     graph_type = ['Cases Comparison', 'Deaths Comparison']
@@ -780,12 +791,12 @@ def main():
     st.title('COVID-19 Comparison Dashboard')
     st.markdown('app by Pablo Pereira')
 
-    default_ix1 = countries.index('Israel')
-    default_ix2 = countries.index('Sweden')
+    default_ix1 = countries.index('Brazil')
+    default_ix2 = countries.index('United States')
 
+    pGraphType = st.sidebar.selectbox('Graph type', graph_type, index=1)
     pCountry1 = st.sidebar.selectbox('First country', countries, index=default_ix1)
     pCountry2 = st.sidebar.selectbox('Second country', countries, index=default_ix2)
-    pGraphType = st.sidebar.selectbox('Graph type', graph_type, index=1)
 
     # Creating the sliced dataframe to plot
     country1 = pd.DataFrame(dfVaccination.loc[dfVaccination.location==pCountry1])
@@ -815,9 +826,6 @@ def main():
                                         'COVID-19 Country cases comparison')     
     
     st.plotly_chart(figure)    
-
-
-    #st.pyplot(figure)
 
 if __name__ == '__main__':
   main()
