@@ -284,11 +284,12 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
       go.Table(
           header=dict(
               values=["<b>Population (Millions)</b>", "<b>Perc. of Population fully vaccineted</b>","<b>Vaccination started on (MM/DD/YY)</b>", "<b>Cases Total</b>", "<b>Deaths Total</b>", "<b>Mortality Rate</b>", "<b>Last Month Growth Rate</b>"],
-              font=dict(size=10),
+              font=dict(size=12),
               align="center"
           ),
           cells=dict(
               values=cells1,
+              font=dict(size=12),              
               align = "center")
       ),
       row=3, col=1
@@ -328,13 +329,13 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   fig.add_trace(
       go.Table(
           header=dict(
-              values=["<b>Population (Millions)</b>", "<b>Perc of Population fully vaccineted</b>","<b>Vaccination started on (MM/DD/YY)</b>", "<b>Cases Total</b>", "<b>Deaths Total</b>", "<b>Mortality Rate</b>", "<b>Last Month Growth Rate</b>"],
-              font=dict(size=10),
+              values=["<b>Population (Millions)</b>", "<b>Perc of Population fully vaccineted</b>","<b>Vaccination Started on (MM/DD/YY)</b>", "<b>Cases Total</b>", "<b>Deaths Total</b>", "<b>Mortality Rate</b>", "<b>Last Month Growth Rate</b>"],
+              font=dict(size=12),
               align="center"
           ),
-
           cells=dict(
               values=cells2,
+              font=dict(size=12),
               align = "center")
       ),
       row=3, col=2
@@ -469,7 +470,7 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
       go.Scatter(x=dfCountry2['date'], 
                 y=dfCountry2['new_deaths'],
                 marker=dict(
-                            color='gold',
+                            color='goldenrod',
                             size=120,
           ), 
       name=f"Daily death count in {cTitleCountry2}",
@@ -635,33 +636,36 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   except:
     Vaccination_Start_Date1 = '-'    
 
-  casess_Total1           = int(dfCountry1['total_deaths'].max())
+  cases_Total1            = int(dfCountry1['total_cases'].max())
   deaths_Total1           = int(dfCountry1['total_deaths'].max())
   Mortality_Rate1         = round(dfCountry1['new_deaths'].sum()/dfCountry1['new_cases'].sum()*100,2)
   Growth_Rate1            = round(abs(1+(this_month_death1-last_month_death1)/last_month_death1)*100,2)
   cells1 = []
-  cells1.append(round((Population1/1000000),1))
-  cells1.append(f'{Perc_Fully_Vaccinated1}%')
-  
-  if Vaccination_Start_Date1 == '-':
-    cells1.append(Vaccination_Start_Date1)
-  else:
-    cells1.append(Vaccination_Start_Date1.strftime("%m/%d/%y"))
+  cells1.append(f'<b>{round((Population1/1000000),1)}</b>')
+  cells1.append(f'<b>{Perc_Fully_Vaccinated1}%</b>')
 
-  cells1.append("{:,}".format(deaths_Total1))
-  cells1.append("{:,}".format(deaths_Total1))
-  cells1.append(f'{Mortality_Rate1}%')
-  cells1.append(f'{Growth_Rate1}%')      
+  if Vaccination_Start_Date1 == '-':
+    cells1.append(f'<b>{Vaccination_Start_Date1}</b>')
+  else:
+    cells1.append(f'<b>{Vaccination_Start_Date1.strftime("%m/%d/%y")}</b>')
+  
+  cases_formatted1 = "{:,}".format(cases_Total1)
+  deaths_formatted1 = "{:,}".format(deaths_Total1)
+  cells1.append(f'<b>{cases_formatted1}</b>')
+  cells1.append(f'<b>{deaths_formatted1}</b>')
+  cells1.append(f'<b>{Mortality_Rate1}%</b>')
+  cells1.append(f'<b>{Growth_Rate1}%</b>')    
 
   fig.add_trace(
       go.Table(
           header=dict(
-              values=["<b>Population (Millions)</b>", "<b>Perc. of Population fully vaccineted</b>","<b>Vaccination started on (MM/DD/YY)</b>", "<b>death count Total</b>", "<b>death count Total</b>", "<b>Mortality Rate</b>", "<b>Last Month Growth Rate</b>"],
-              font=dict(size=10),
+              values=["<b>Population (Millions)</b>", "<b>Perc. of Population fully vaccineted</b>","<b>Vaccination Started on (MM/DD/YY)</b>", "<b>Case Count Total</b>", "<b>Death Count Total</b>", "<b>Mortality Rate</b>", "<b>Last Month Growth Rate</b>"],
+              font=dict(size=12),
               align="center"
           ),
           cells=dict(
               values=cells1,
+              font=dict(size=12),
               align = "center"),
       ),
       row=3, col=1
@@ -684,29 +688,32 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   Mortality_Rate2         = round(dfCountry2['new_deaths'].sum()/dfCountry2['new_cases'].sum()*100,2)
   Growth_Rate2            = round(abs(1+(this_month_death2 - last_month_death2)/last_month_death2)*100,2)
   cells2 = []
-  cells2.append(round((Population2/1000000),1))
-  cells2.append(f'{Perc_Fully_Vaccinated2}%')
+  cells2.append(f'<b>{round((Population2/1000000),1)}</b>')
+  cells2.append(f'<b>{Perc_Fully_Vaccinated2}%</b>')
 
   if Vaccination_Start_Date2 == '-':
-    cells2.append(Vaccination_Start_Date2)
+    cells2.append(f'<b>{Vaccination_Start_Date2}</b>')
   else:
-    cells2.append(Vaccination_Start_Date2.strftime("%m/%d/%y"))
-
-  cells2.append("{:,}".format(cases_Total2))
-  cells2.append("{:,}".format(deaths_Total2))
-  cells2.append(f'{Mortality_Rate2}%')
-  cells2.append(f'{Growth_Rate2}%')
+    cells2.append(f'<b>{Vaccination_Start_Date2.strftime("%m/%d/%y")}</b>')
+  
+  cases_formatted2 = "{:,}".format(cases_Total2)
+  deaths_formatted2 = "{:,}".format(deaths_Total2)
+  cells2.append(f'<b>{cases_formatted2}</b>')
+  cells2.append(f'<b>{deaths_formatted2}</b>')
+  cells2.append(f'<b>{Mortality_Rate2}%</b>')
+  cells2.append(f'<b>{Growth_Rate2}%</b>')
 
   fig.add_trace(
       go.Table(
           header=dict(
-              values=["<b>Population (Millions)</b>", "<b>Perc of Population fully vaccineted</b>","<b>Vaccination started on (MM/DD/YY)</b>", "<b>death count Total</b>", "<b>death count Total</b>", "<b>Mortality Rate</b>", "<b>Last Month Growth Rate</b>"],
-              font=dict(size=10),
+              values=["<b>Population (Millions)</b>", "<b>Perc of Population Fully Vaccineted</b>","<b>Vaccination Started on (MM/DD/YY)</b>", "<b>Case Count Total</b>", "<b>Death Count Total</b>", "<b>Mortality Rate</b>", "<b>Last Month Growth Rate</b>"],
+              font=dict(size=12),
               align="center"
           ),
 
           cells=dict(
               values=cells2,
+              font=dict(size=12),              
               align = "center")
       ),
       row=3, col=2
