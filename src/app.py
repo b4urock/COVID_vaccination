@@ -260,7 +260,7 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   Perc_Fully_Vaccinated1  = dfCountry1['people_fully_vaccinated_perc'].max()#round((dfCountry1['people_fully_vaccinated'].max()/ 
                            # dfCountry1['population'].max())*100,2)
   try:                            
-    Vaccination_Start_Date1 = dfCountry1.loc[~dfCountry1['new_vaccinations'].isnull()].iloc[0]         ['date']
+    Vaccination_Start_Date1 = dfCountry1.loc[~dfCountry1['new_vaccinations'].isnull()].iloc[0]['date']
   except:
     Vaccination_Start_Date1 = '-'
 
@@ -305,10 +305,9 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   Perc_Fully_Vaccinated2  = round((dfCountry2['people_fully_vaccinated'].max()/ 
                             dfCountry2['population'].max())*100,2)
   try:                            
-    Vaccination_Start_Date2 = dfCountry2.loc[~dfCountry2['new_vaccinations'].isnull()].iloc[0]
-    ['date']
+    Vaccination_Start_Date2 = dfCountry2.loc[~dfCountry2['new_vaccinations'].isnull()].iloc[0]['date']
   except:
-    Vaccination_Start_Date2 = '-'
+    Vaccination_Start_Date2 = None
 
   Cases_Total2            = int(dfCountry2['total_cases'].max())
   Deaths_Total2           = int(dfCountry2['total_deaths'].max())
@@ -317,9 +316,9 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   cells2 = []
   cells2.append(round((Population2/1000000),1))
   cells2.append(f'{Perc_Fully_Vaccinated2}%')
-  
-  if Vaccination_Start_Date2 == '-':
-    cells2.append(Vaccination_Start_Date2)
+
+  if Vaccination_Start_Date2 is None:
+    cells2.append('-')
   else:
     cells2.append(Vaccination_Start_Date2.strftime("%m/%d/%y"))
 
@@ -388,9 +387,8 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
     fig.add_annotation(text=f'<b>{plot2}</b>',
                     xref="paper", yref="paper",
                     x=0.77, y=0.33, showarrow=False)               
-
-  fig.show()
-  return 
+  
+  return fig
 
 # Função para plotar painel de Casos de COVID-19, óbitos por COVID-19
 # e Percentual de Isolamento.
@@ -754,9 +752,7 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
     fig.add_annotation(text=f'<b>{plot2}</b>',
                     xref="paper", yref="paper",
                     x=0.77, y=0.33, showarrow=False)               
-
-  fig.show()
-  return 
+  return fig
 
 #@st.cache(allow_output_mutation=True)
 def main():
@@ -778,19 +774,22 @@ def main():
     #i = dfVaccination[dfVaccination.location.isin(countries)].index
     #dfVaccination.drop(i, inplace=True)
 
-    countries = dfVaccination.location.unique()
+    countries = dfVaccination.location.unique().tolist()
     graph_type = ['Cases Comparison', 'Deaths Comparison']
 
     st.title('COVID-19 Comparison Dashboard')
     st.markdown('app by Pablo Pereira')
 
-    pCountry1 = st.sidebar.selectbox('First country', countries)
-    pCountry2 = st.sidebar.selectbox('Second country', countries)
-    pGraphType = st.sidebar.selectbox('Graph type', graph_type)
+    default_ix1 = countries.index('Israel')
+    default_ix2 = countries.index('Sweden')
+
+    pCountry1 = st.sidebar.selectbox('First country', countries, index=default_ix1)
+    pCountry2 = st.sidebar.selectbox('Second country', countries, index=default_ix2)
+    pGraphType = st.sidebar.selectbox('Graph type', graph_type, index=1)
 
     # Creating the sliced dataframe to plot
     country1 = pd.DataFrame(dfVaccination.loc[dfVaccination.location==pCountry1])
-    country2 = pd.DataFrame(dfVaccination.loc[dfVaccination.location==pCountry2])   
+    country2 = pd.DataFrame(dfVaccination.loc[dfVaccination.location==pCountry2])    
 
     # Adjusting the vaccination info is necessary
     if country1.people_fully_vaccinated_per_million.isnull().all():
@@ -802,21 +801,23 @@ def main():
         country2['people_fully_vaccinated_perc']     = round(((country2['new_vaccinations'].cumsum()/2)/country2['population'])*100,2)  
 
     if pGraphType == 'Deaths Comparison':
-        COVID_deaths(country1, 
-                     country2,
-                     pCountry1,
-                     pCountry2,
-                     'COVID-19 Country deaths comparison')
+       figure = COVID_deaths(country1, 
+                            country2,
+                            pCountry1,
+                            pCountry2,
+                            'COVID-19 Country deaths comparison')
 
     elif pGraphType == 'Cases Comparison':
-        COVID_Cases_per_million(country1, 
-                                country2,
-                                pCountry1,
-                                pCountry2,
-                                'COVID-19 Country cases comparison')                
+        figure = COVID_Cases_per_million(country1, 
+                                        country2,
+                                        pCountry1,
+                                        pCountry2,
+                                        'COVID-19 Country cases comparison')     
+    
+    st.plotly_chart(figure)    
 
 
     #st.pyplot(figure)
 
 if __name__ == '__main__':
-    main()
+  main()
