@@ -133,10 +133,10 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   fig.add_trace(
       go.Scatter(x=dfCountry1['date'], 
                 y=dfCountry1['people_fully_vaccinated_per_million'],
-                marker=dict(color='Purple',
+                marker=dict(color='darkorchid',
                             size=160,
                             line=dict(
-                            color='Purple',
+                            color='darkorchid',
                             width=40)), 
       name="People Fully Vaccinated per Million",
       hovertemplate=
@@ -146,28 +146,7 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
         "<extra></extra>"),   
       row=2, col=1
   )
-
-  fig.add_trace(
-      go.Scatter(
-      x=dfCountry1['date'],
-      y=dfCountry1['new_vaccinations'],
-      mode='lines',
-          marker=dict(
-              color='darkorchid',
-              size=160,
-              line=dict(
-                  color='darkorchid',
-                  width=40
-              )),
-      name='New Vaccinated per Million"',
-      hovertemplate=
-        f"<b>{cTitleCountry1}'s vaccinated per million<br>(at least one dose) </b><br><br>" +
-        "Date: %{x}<br>" +
-        "Vaccinated per million: %{y:,.}<br>" +
-        "<extra></extra>",
-      showlegend=False),
-      row=2, col=1)
-
+  
   fig.add_trace(
       go.Scatter(x=dfCountry1['date'], 
                 y=dfCountry1['total_tests_per_million'],
@@ -185,38 +164,16 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
         "<extra></extra>"),
       row=2, col=1
   )
-
-  fig.add_trace(
-      go.Scatter(
-      x=dfCountry2['date'],
-      y=dfCountry2['new_vaccinations'],
-      mode='lines',
-          marker=dict(
-              color='darkorchid',
-              size=160,
-              line=dict(
-                  color='darkorchid',
-                  width=40
-              )),
-      name='People Fully Vaccinated per Million"',
-      hovertemplate=
-        f"<b>{cTitleCountry2}'s vaccinated per million<br>(at least one dose) </b><br><br>" +
-        "Date: %{x}<br>" +
-        "Vaccinated per million: %{y:,.}<br>" +
-        "<extra></extra>",
-      showlegend=False),
-      row=2, col=2)
-
   fig.add_trace(
       go.Scatter(
       x=dfCountry2['date'],
       y=dfCountry2['people_fully_vaccinated_per_million'],
       mode='lines',
           marker=dict(
-              color='Purple',
+              color='darkorchid',
               size=160,
               line=dict(
-                  color='Purple',
+                  color='darkorchid',
                   width=40
               )),
       name='People Fully Vaccinated per Million"',
@@ -346,9 +303,9 @@ def COVID_Cases_per_million(dfCountry1: pd.DataFrame,
   plot2 = ''
 
   if dfCountry1['total_tests_per_million'].isnull().values.sum():
-     plot1 = f'** No all test data avaiable for {cTitleCountry1}'
+     plot1 = f'** Not all test data avaiable for {cTitleCountry1}'
   elif dfCountry2['total_tests_per_million'].isnull().values.sum():
-     plot2 = f'** No all test data avaiable for {cTitleCountry2}'
+     plot2 = f'** Not all test data avaiable for {cTitleCountry2}'
 
   fig.update_layout(
       template = 'plotly_dark',
@@ -506,10 +463,10 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   fig.add_trace(
       go.Scatter(x=dfCountry1['date'], 
                 y=dfCountry1['people_fully_vaccinated_per_million'],
-                marker=dict(color='Purple',
+                marker=dict(color='darkorchid',
                             size=160,
                             line=dict(
-                            color='Purple',
+                            color='darkorchid',
                             width=40)), 
       name="People Fully Vaccinated per Million",
       hovertemplate=
@@ -519,27 +476,6 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
         "<extra></extra>"),   
       row=2, col=1
   )
-
-  fig.add_trace(
-      go.Scatter(
-      x=dfCountry1['date'],
-      y=dfCountry1['new_vaccinations_per_million'],
-      mode='lines',
-          marker=dict(
-              color='darkorchid',
-              size=160,
-              line=dict(
-                  color='darkorchid',
-                  width=40
-              )),
-      name='New Vaccinated per Million"',
-      hovertemplate=
-        f"<b>{cTitleCountry1}'s vaccinated per million<br>(at least one dose) </b><br><br>" +
-        "Date: %{x}<br>" +
-        "Vaccinated per million: %{y:,.}<br>" +
-        "<extra></extra>",
-      showlegend=False),
-      row=2, col=1)
 
   fig.add_trace(
       go.Scatter(x=dfCountry1['date'], 
@@ -562,34 +498,13 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   fig.add_trace(
       go.Scatter(
       x=dfCountry2['date'],
-      y=dfCountry2['new_vaccinations_per_million'],
+      y=dfCountry2['people_fully_vaccinated_per_million'],
       mode='lines',
           marker=dict(
               color='darkorchid',
               size=160,
               line=dict(
                   color='darkorchid',
-                  width=40
-              )),
-      name='People Fully Vaccinated per Million"',
-      hovertemplate=
-        f"<b>{cTitleCountry2}'s vaccinated per million<br>(at least one dose) </b><br><br>" +
-        "Date: %{x}<br>" +
-        "Vaccinated per million: %{y:,.}<br>" +
-        "<extra></extra>",
-      showlegend=False),
-      row=2, col=2)
-
-  fig.add_trace(
-      go.Scatter(
-      x=dfCountry2['date'],
-      y=dfCountry2['people_fully_vaccinated_per_million'],
-      mode='lines',
-          marker=dict(
-              color='Purple',
-              size=160,
-              line=dict(
-                  color='Purple',
                   width=40
               )),
       name='People Fully Vaccinated per Million"',
@@ -724,9 +639,9 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
   plot2 = ''
 
   if dfCountry1['total_tests_per_million'].isnull().values.sum():
-     plot1 = f'** No all test data avaiable for {cTitleCountry1}'
+     plot1 = f'** Not all test data avaiable for {cTitleCountry1}'
   elif dfCountry2['total_tests_per_million'].isnull().values.sum():
-     plot2 = f'** No all test data avaiable for {cTitleCountry2}'
+     plot2 = f'** Not all test data avaiable for {cTitleCountry2}'
 
   fig.update_layout(
       template = 'plotly_dark',
