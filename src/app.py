@@ -11,6 +11,11 @@ from matplotlib.dates import DateFormatter
 from datetime import datetime
 from datetime import timedelta
 
+import urllib.request
+import io
+from PIL import Image
+import base64
+
 import plotly.offline as pyo
 import plotly.graph_objs as go 
 from plotly.subplots import make_subplots    
@@ -691,6 +696,11 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
 def main():
     url = 'https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv?raw=true'
     dfVaccination = load_data(url)    
+
+    urlimg = "https://github.com/b4urock/COVID_vaccination/raw/main/assets/2019-nCoV-CDC-23312_without_background-pubic-domain.png"
+    with urllib.request.urlopen(urlimg) as i:
+	    byteImg = io.BytesIO(i.read())
+	    img = Image.open(byteImg)
 
     # Creating support columns for the dataframe
     dfVaccination['new_cases_per_million_rollmean7'] = round(dfVaccination['new_cases_per_million'].rolling(7, center=True).mean(),2) # Rolling mean 7 days
