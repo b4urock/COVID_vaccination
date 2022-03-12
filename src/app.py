@@ -580,12 +580,12 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
       go.Table(
           header=dict(
               values=["<b>Population (Millions)</b>", "<b>Perc. of Population fully vaccineted</b>","<b>Vaccination Started on (MM/DD/YY)</b>", "<b>Case Count Total</b>", "<b>Death Count Total</b>", "<b>Mortality Rate</b>", "<b>Last Month Growth Rate</b>"],
-              font=dict(size=12),
+              font=dict(size=12, color='white'),
               align="center"
           ),
           cells=dict(
               values=cells1,
-              font=dict(size=12),
+              font=dict(size=12, color='white'),
               align = "center"),
       ),
       row=3, col=1
@@ -627,13 +627,13 @@ def COVID_deaths (dfCountry1: pd.DataFrame,
       go.Table(
           header=dict(
               values=["<b>Population (Millions)</b>", "<b>Perc of Population Fully Vaccineted</b>","<b>Vaccination Started on (MM/DD/YY)</b>", "<b>Case Count Total</b>", "<b>Death Count Total</b>", "<b>Mortality Rate</b>", "<b>Last Month Growth Rate</b>"],
-              font=dict(size=12),
+              font=dict(size=12, color='white'),
               align="center"
           ),
 
           cells=dict(
               values=cells2,
-              font=dict(size=12),              
+              font=dict(size=12, color='white'),              
               align = "center")
       ),
       row=3, col=2
